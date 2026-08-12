@@ -1,0 +1,109 @@
+[
+  {
+    "id": 1,
+    "question": "What is the notice period in the employment agreement?",
+    "expected_source_files": ["02_employment_agreement_excerpt.md"],
+    "expected_answer_contains": "60 days",
+    "category": "grounded"
+  },
+  {
+    "id": 2,
+    "question": "How long is the non-compete period after an employee leaves?",
+    "expected_source_files": ["02_employment_agreement_excerpt.md"],
+    "expected_answer_contains": "12 months",
+    "category": "grounded"
+  },
+  {
+    "id": 3,
+    "question": "What counts as confidential information under the employment agreement?",
+    "expected_source_files": ["02_employment_agreement_excerpt.md"],
+    "expected_answer_contains": "pricing sheets, unreleased product roadmaps, customer names",
+    "category": "grounded"
+  },
+  {
+    "id": 4,
+    "question": "What does the plaintiff claim in Arvind Mehta v. Northfield Logistics?",
+    "expected_source_files": ["01_matter_memo_arvind_v_northfield.md"],
+    "expected_answer_contains": "unpaid invoices for transport services between March and June 2024",
+    "category": "grounded"
+  },
+  {
+    "id": 5,
+    "question": "What is the limitation period for contract claims under the Riverside Code?",
+    "expected_source_files": ["01_matter_memo_arvind_v_northfield.md"],
+    "expected_answer_contains": "three years from breach date",
+    "category": "grounded"
+  },
+  {
+    "id": 6,
+    "question": "When is the next hearing in the Arvind Mehta v. Northfield case, per the matter memo?",
+    "expected_source_files": ["01_matter_memo_arvind_v_northfield.md"],
+    "expected_answer_contains": "15 August 2025",
+    "category": "grounded"
+  },
+  {
+    "id": 7,
+    "question": "How many clear days before a hearing must written arguments be filed?",
+    "expected_source_files": ["03_hearing_notice_template.md"],
+    "expected_answer_contains": "seven clear days",
+    "category": "grounded"
+  },
+  {
+    "id": 8,
+    "question": "What time is case CV-2024-8812 listed for arguments today, per the hearing notice?",
+    "expected_source_files": ["03_hearing_notice_template.md"],
+    "expected_answer_contains": "11:00 a.m.",
+    "category": "grounded"
+  },
+  {
+    "id": 9,
+    "question": "What is the mandatory mediation period for commercial suits above five lakh, under the statute?",
+    "expected_source_files": ["04_statute_style_excerpt_fictional.md"],
+    "expected_answer_contains": "30 days",
+    "category": "grounded"
+  },
+  {
+    "id": 10,
+    "question": "What interest rate applies to delayed payments when a contract fixes no rate?",
+    "expected_source_files": ["04_statute_style_excerpt_fictional.md"],
+    "expected_answer_contains": "9% per year",
+    "category": "grounded"
+  },
+  {
+    "id": 11,
+    "question": "What percentage of open invoices did Northfield offer to settle for?",
+    "expected_source_files": ["05_counsel_notes_settlement.md"],
+    "expected_answer_contains": "70%",
+    "category": "grounded"
+  },
+  {
+    "id": 12,
+    "question": "What is the monthly rent for Unit 4B, Harbor View Tower?",
+    "expected_source_files": ["06_property_lease_clause.md"],
+    "expected_answer_contains": "45,000",
+    "category": "grounded"
+  },
+  {
+    "id": 13,
+    "question": "Within how many days must the security deposit be refunded after handover, per the lease?",
+    "expected_source_files": ["06_property_lease_clause.md"],
+    "expected_answer_contains": "45 days",
+    "category": "grounded"
+  },
+  {
+    "id": 14,
+    "question": "What is the security deposit refund period in the employment agreement?",
+    "expected_source_files": [],
+    "expected_answer_contains": "can't find",
+    "category": "adversarial",
+    "note": "Sounds answerable — mixes 'security deposit' (a lease concept) with 'employment agreement'. Not present anywhere in the corpus. Should refuse, not blend the lease's 45-day figure into an employment-agreement answer."
+  },
+  {
+    "id": 15,
+    "question": "What is the capital of France?",
+    "expected_source_files": [],
+    "expected_answer_contains": "can't find",
+    "category": "out_of_corpus",
+    "note": "Completely unrelated to the corpus. Should refuse cleanly with a low-similarity reason."
+  }
+]
