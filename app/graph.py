@@ -22,6 +22,7 @@ Loop guard: state["retries"] is capped at MAX_RETRIES. Once hit, the
 graph is forced to refuse rather than retry indefinitely.
 """
 import os
+import re
 from typing import TypedDict
 
 from dotenv import load_dotenv
@@ -39,9 +40,10 @@ EMBEDDING_MODEL = os.environ.get("EMBEDDING_MODEL", "gemini-embedding-001")
 GENERATION_MODEL = os.environ.get("GENERATION_MODEL", "gemini-2.5-flash")
 
 TOP_K = 4
-SCORE_THRESHOLD = 0.5          # below this, similarity itself is too weak
+HIGH_CONFIDENCE = 0.68   # above this, trust similarity alone — skip the LLM check
+LOW_CONFIDENCE = 0.50    # below this, reject immediately — skip the LLM check
+# between the two: genuinely uncertain, worth spending an LLM call to check
 MAX_RETRIES = 2                # loop guard
-
 client = genai.Client(api_key=GEMINI_API_KEY)
 pc = Pinecone(api_key=PINECONE_API_KEY)
 index = pc.Index(INDEX_NAME)
@@ -90,9 +92,15 @@ def grade_node(state: GraphState) -> GraphState:
         return {**state, "grade_ok": False, "grade_reason": "no chunks retrieved"}
 
     avg_score = sum(c["score"] for c in chunks) / len(chunks)
-    if avg_score < SCORE_THRESHOLD:
+
+    # decisive cases: trust similarity alone, skip the extra LLM call
+    if avg_score >= HIGH_CONFIDENCE:
+        return {**state, "grade_ok": True, "grade_reason": f"passed on similarity alone (avg={avg_score:.2f}, high confidence)"}
+    if avg_score < LOW_CONFIDENCE:
         return {**state, "grade_ok": False, "grade_reason": f"low similarity (avg={avg_score:.2f})"}
 
+    # borderline case: spend one LLM call to check actual relevance,
+    # not just vector proximity
     context = "\n\n".join(f"[{c['source_file']}] {c['text']}" for c in chunks)
     check_prompt = (
         f"Question: {state['question']}\n\n"
@@ -104,9 +112,9 @@ def grade_node(state: GraphState) -> GraphState:
     verdict = resp.text.strip().upper()
 
     if "YES" not in verdict:
-        return {**state, "grade_ok": False, "grade_reason": "chunks off-topic (LLM relevance check failed)"}
+        return {**state, "grade_ok": False, "grade_reason": f"borderline similarity (avg={avg_score:.2f}), chunks off-topic per LLM check"}
 
-    return {**state, "grade_ok": True, "grade_reason": f"passed (avg similarity={avg_score:.2f})"}
+    return {**state, "grade_ok": True, "grade_reason": f"borderline similarity (avg={avg_score:.2f}), passed LLM relevance check"}
 
 
 def retry_router(state: GraphState) -> str:
@@ -142,9 +150,13 @@ def generate_node(state: GraphState) -> GraphState:
     answer_part = raw
     used_ids = {c["chunk_id"] for c in state["chunks"]}  # fallback: all, if parsing fails
 
-    if "USED_CHUNK_IDS:" in raw:
-        answer_part, ids_part = raw.split("USED_CHUNK_IDS:", 1)
-        answer_part = answer_part.replace("ANSWER:", "").strip()
+    # case-insensitive split — models don't always match "USED_CHUNK_IDS"
+    # casing exactly, and an exact-string match silently falls back to
+    # citing everything retrieved, defeating the point of this parsing.
+    match = re.split(r"USED_CHUNK_IDS\s*:", raw, maxsplit=1, flags=re.IGNORECASE)
+    if len(match) == 2:
+        answer_part, ids_part = match
+        answer_part = re.sub(r"^\s*ANSWER\s*:", "", answer_part, flags=re.IGNORECASE).strip()
         used_ids = {i.strip() for i in ids_part.split(",") if i.strip()}
 
     citations = [
