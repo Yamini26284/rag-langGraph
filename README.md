@@ -19,7 +19,7 @@ You give it a folder of documents. It reads them, breaks them into pieces, and s
 
 **1. Clone and set up a virtual environment**
 ```bash
-git clone https://github.com/YOUR_USERNAME/rag-langgraph.git
+git clone https://github.com/Yamini26284/rag-langGraph.git
 cd rag-langgraph
 python -m venv venv
 venv\Scripts\activate        # Windows
