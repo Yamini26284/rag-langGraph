@@ -6,4 +6,4 @@ pinecone
 google-genai
 python-dotenv
 pydantic
-request
+requests
