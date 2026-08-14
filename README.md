@@ -1,6 +1,8 @@
-# rag-langgraph
+# rag-langGraph
 
-A small backend that answers questions about a set of documents — and only from those documents. Ask it something, and it either points you to the exact passage the answer came from, or tells you plainly that it can't find it. No made-up answers, no fake sources.
+AI chatbots or Assistants often give confident, fluent answers that turn out to be completely made up — this is a real problem. The answer needs to be trustworthy, not just convincing. This project solves that.
+
+I built a backend that answers questions only from a given set of documents, using LangGraph, Pinecone, and FastAPI. Every answer comes with the exact document and section it came from and if the answer genuinely isn't in the documents, it says so instead of guessing.
 
 ## Video walkthrough
 
