@@ -1,6 +1,8 @@
 # rag-langGraph
 
-AI chatbots or Assistants often give confident, fluent answers that turn out to be completely made up — this is a real problem. The answer needs to be trustworthy, not just convincing. This project solves that.
+AI chatbots or Assistants often give confident, fluent answers that turn out to be completely made up and this is a real problem. The answer needs to be trustworthy, not just convincing. 
+
+This project solves that.
 
 I built a backend that answers questions only from a given set of documents, using LangGraph, Pinecone, and FastAPI. Every answer comes with the exact document and section it came from and if the answer genuinely isn't in the documents, it says so instead of guessing.
 
@@ -14,8 +16,8 @@ You give it a folder of documents. It reads them, breaks them into pieces, and s
 
 - Searches for the most relevant pieces of text
 - Checks whether what it found is actually good enough to answer the question
-- If yes — writes an answer and tells you exactly which document and section it came from
-- If no — says so, instead of guessing
+- If yes writes an answer and tells you exactly which document and section it came from
+- If no says so, instead of guessing
 
 ## Quick start
 
@@ -46,11 +48,11 @@ cp .env.example .env          # macOS/Linux
 
 Open `.env` and fill in:
 
-- `GEMINI_API_KEY` — free at [aistudio.google.com](https://aistudio.google.com)
-- `PINECONE_API_KEY` — free at [app.pinecone.io](https://app.pinecone.io)
+- `GEMINI_API_KEY` : free at [aistudio.google.com](https://aistudio.google.com)
+- `PINECONE_API_KEY` : free at [app.pinecone.io](https://app.pinecone.io)
 
 Leave everything else as-is.
-Note: you don't need to create the Pinecone index yourself — it's created automatically, with the right settings, the first time you run ingest.
+Note: you don't need to create the Pinecone index yourself, it's created automatically, with the right settings, the first time you run ingest.
 
 **4. Load the documents**
 
@@ -125,7 +127,7 @@ question → search documents → is this good enough?  ──yes──→ write
 - **Search** finds the most relevant chunks of text.
 - **Check** looks at how confident the match is. If it's clearly strong or clearly weak, it decides right away. If it's borderline, it does one extra check — actually reading the passages to see if they answer the question, not just relying on a similarity number.
 - **Answer** is written only from the passages that were actually used, with the exact source cited.
-- **Give up gracefully** — if nothing good turns up after two tries, it says so instead of looping forever or making something up.
+- **Give up gracefully**, if nothing good turns up after two tries, it says so instead of looping forever or making something up.
 
 Full node-by-node breakdown and a diagram: [`docs/langgraph.md`](docs/langgraph.md)
 
@@ -161,5 +163,5 @@ This asks all 15 test questions and writes a pass/fail report to `eval/results.m
 
 ## A few honest notes
 
-- Free-tier API usage has rate limits, so `eval/run_eval.py` intentionally pauses a few seconds between questions. A single question through the API itself answers in a few seconds — the delay is only in the batch test script.
+- Free-tier API usage has rate limits, so `eval/run_eval.py` intentionally pauses a few seconds between questions. A single question through the API itself answers in a few seconds, the delay is only in the batch test script.
 - The document loader currently expects Markdown files with heading structure (`#`, `##`). Other formats would need a different splitting approach.
