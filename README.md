@@ -60,7 +60,7 @@ Note: you don't need to create the Pinecone index yourself, it's created automat
 python ingest/ingest.py
 ```
 
-This reads everything in `corpus/`, splits it into pieces, and stores it. Safe to run more than once — it won't create duplicates.
+This reads everything in `corpus/`, splits it into pieces, and stores it. Safe to run more than once, it won't create duplicates.
 
 **5. Start the server**
 
@@ -133,11 +133,11 @@ Full node-by-node breakdown and a diagram: [`docs/langgraph.md`](docs/langgraph.
 
 ## A few small decisions that make this smarter
 
-**The "good enough?" check explains itself.** Instead of a plain yes/no, it always records _why_ — "low similarity," "borderline, but passed a closer read," etc. That reasoning is visible in every response, so you can see why an answer was trusted or refused, not just that it was.
+**The "good enough?" check explains itself.** Instead of a plain yes/no, it always records _why_ : "low similarity," "borderline, but passed a closer read," etc. That reasoning is visible in every response, so you can see why an answer was trusted or refused, not just that it was.
 
-**It only double-checks when it's actually unsure.** Most questions are either an obvious match or an obvious miss, and the confidence score alone is enough. The extra read-through step only kicks in for the genuinely borderline cases — which is both a more honest way to decide, and it means the system isn't burning extra work on questions that were never in doubt.
+**It only double-checks when it's actually unsure.** Most questions are either an obvious match or an obvious miss, and the confidence score alone is enough. The extra read-through step only kicks in for the genuinely borderline cases, which is both a more honest way to decide, and it means the system isn't burning extra work on questions that were never in doubt.
 
-**Chunks follow the document's own structure.** Instead of slicing text into arbitrary fixed-size blocks, documents are split along their natural section headings. Each chunk ends up being one complete thought — a clause, a section, a note — instead of a random cut mid-sentence, which is a big part of why citations point to something actually readable and useful.
+**Chunks follow the document's own structure.** Instead of slicing text into arbitrary fixed-size blocks, documents are split along their natural section headings. Each chunk ends up being one complete thought a clause, a section, a note instead of a random cut mid-sentence, which is a big part of why citations point to something actually readable and useful.
 
 ## Project structure
 
@@ -148,7 +148,7 @@ Full node-by-node breakdown and a diagram: [`docs/langgraph.md`](docs/langgraph.
 | `eval/`   | 15 test questions + an automated pass/fail check                                                     |
 | `docs/`   | Diagram and explanation of the flow                                                                  |
 | `tests/`  | Small dev sanity checks (not the main test suite)                                                    |
-| `notes/`  | Personal notes on why certain choices were made — not required reading, just here for anyone curious |
+| `notes/`  | Personal notes on why certain choices were made not required reading, just here for anyone curious |
 | `corpus/` | The sample documents used for this project                                                           |
 
 ## Running the tests
@@ -159,7 +159,7 @@ With the server running, in a separate terminal:
 python eval/run_eval.py
 ```
 
-This asks all 15 test questions and writes a pass/fail report to `eval/results.md`. Currently 15/15 pass, including one question written to sound answerable but that the documents don't actually cover, and one totally unrelated question — both correctly refused.
+This asks all 15 test questions and writes a pass/fail report to `eval/results.md`. Currently 15/15 pass, including one question written to sound answerable but that the documents don't actually cover, and one totally unrelated question both correctly refused.
 
 ## A few honest notes
 
