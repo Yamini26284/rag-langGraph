@@ -12,12 +12,12 @@ This is the important step. Before trusting what was found, it asks: *is this ac
 
 - If the match is clearly strong, it says yes right away.
 - If the match is clearly weak, it says no right away.
-- If it's somewhere in between, it does one more check — it actually reads the passages and asks a model "does this genuinely answer the question, or did it just look close?" This extra check only happens for the unclear cases, so it's not wasted effort on the obvious ones.
+- If it's somewhere in between, it does one more check, it actually reads the passages and asks a model "does this genuinely answer the question, or did it just look close?" This extra check only happens for the unclear cases, so it's not wasted effort on the obvious ones.
 
 Either way, it always writes down *why* it made that decision, not just yes or no.
 
 **3a. Write the answer** (if the check said yes)
-An answer is written using only the passages that were found — nothing outside them. Every source used gets listed alongside the answer, so it's clear exactly where each part of the answer came from.
+An answer is written using only the passages that were found and nothing outside them. Every source used gets listed alongside the answer, so it's clear exactly where each part of the answer came from.
 
 **3b. Say "can't find it"** (if the check said no)
 If the passages weren't good enough, it doesn't guess. It tries searching again, up to 2 times, in case the first attempt just didn't hit the right spot. If it still can't find anything solid after that, it plainly says the documents don't have the answer.
@@ -26,7 +26,7 @@ If the passages weren't good enough, it doesn't guess. It tries searching again,
 
 This is the part that makes it a real flow instead of one big block of logic:
 
-- After the "Check" step, there's a genuine fork — good matches go one way, weak matches go another.
+- After the "Check" step, there's a genuine fork so good matches go one way, weak matches go another.
 - If it takes the weak path, it's allowed to retry, but only a limited number of times (2). Once that limit is hit, it's forced to stop and say it can't find the answer, instead of ever searching forever.
 
 ## Diagram
