@@ -60,7 +60,7 @@ Note: you don't need to create the Pinecone index yourself, it's created automat
 python ingest/ingest.py
 ```
 
-This reads everything in `corpus/`, splits it into pieces, and stores it. Safe to run more than once, it won't create duplicates.
+This reads every file in `corpus/`, splits them into chunks along section headings, embeds each chunk using Gemini, and saves the vectors to Pinecone with metadata (chunk id, source file, section heading, and text). **Safe to run more than once each chunk has a deterministic ID based on its filename and position, so re-running overwrites the same vectors instead of creating duplicates.**
 
 **5. Start the server**
 
@@ -165,3 +165,14 @@ This asks all 15 test questions and writes a pass/fail report to `eval/results.m
 
 - Free-tier API usage has rate limits, so `eval/run_eval.py` intentionally pauses a few seconds between questions. A single question through the API itself answers in a few seconds, the delay is only in the batch test script.
 - The document loader currently expects Markdown files with heading structure (`#`, `##`). Other formats would need a different splitting approach.
+
+## Pinecone index setup
+
+The index is created automatically the first time you run ingest — no manual setup needed in the Pinecone dashboard. The env vars that control it are all in `.env.example`:
+
+| Variable | What it does |
+|---|---|
+| `PINECONE_INDEX_NAME` | Name of the index (default: `rag-langgraph`) |
+| `PINECONE_CLOUD` | Cloud provider (default: `aws`) |
+| `PINECONE_REGION` | Region (default: `us-east-1`, free tier default) |
+| `EMBEDDING_DIM` | Vector size (default: `768`), must match what was used at index creation |
