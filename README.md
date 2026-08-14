@@ -8,7 +8,7 @@ I built a backend that answers questions only from a given set of documents, usi
 
 ## Video walkthrough
 
-📺 [Watch the walkthrough](PASTE_YOUR_VIDEO_LINK_HERE) — install, ingest documents, start the server, ask a few questions, and a look at how the answer-generation flow works under the hood.
+📺 [Watch the walkthrough](https://www.youtube.com/watch?v=9LLIBBqfcbw) : install, ingest documents, start the server, ask a few questions, and a look at how the answer-generation flow works under the hood.
 
 ## What it does
 
